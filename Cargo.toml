@@ -8,7 +8,7 @@ name = "lib"
 path = "src/lib.rs"
 
 [dependencies]
-rstest = "0.25.0"
+rstest = "0.26.1"
 
 [dev-dependencies]
 criterion = "0.7"
