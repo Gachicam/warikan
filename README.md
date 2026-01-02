@@ -1,5 +1,7 @@
 # warikan
 
+[![CI](https://github.com/Gachicam/warikan/actions/workflows/ci.yml/badge.svg)](https://github.com/Gachicam/warikan/actions/workflows/ci.yml)
+
 割り勘計算ライブラリの TypeScript 実装。複数人での支払い履歴から、誰が誰にいくら返済すべきかを計算します。
 
 ## インストール
