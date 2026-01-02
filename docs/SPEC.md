@@ -133,12 +133,10 @@ function solve(payments: Payment[]): Repayment[];
 ### 基本的な使い方
 
 ```typescript
-import { solve } from 'warikan';
+import { solve } from "warikan";
 
 // A さんが B さんのために 1000 円支払った
-const payments = [
-  { amount: 1000, payer: 'A', beneficiaries: ['B'] }
-];
+const payments = [{ amount: 1000, payer: "A", beneficiaries: ["B"] }];
 
 const repayments = solve(payments);
 // => [{ amount: 1000, from: 'B', to: 'A' }]
@@ -149,7 +147,7 @@ const repayments = solve(payments);
 ```typescript
 // A さんが 2000 円支払い、A, B, C, D の4人で割り勘
 const payments = [
-  { amount: 2000, payer: 'A', beneficiaries: ['A', 'B', 'C', 'D'] }
+  { amount: 2000, payer: "A", beneficiaries: ["A", "B", "C", "D"] },
 ];
 
 const repayments = solve(payments);
@@ -165,10 +163,10 @@ const repayments = solve(payments);
 ```typescript
 // 複数人が別々に支払った場合
 const payments = [
-  { amount: 1200, payer: 'A', beneficiaries: ['A', 'B'] },
-  { amount: 1200, payer: 'B', beneficiaries: ['A', 'B', 'C', 'D'] },
-  { amount: 1200, payer: 'C', beneficiaries: ['A', 'B', 'C', 'D'] },
-  { amount: 1200, payer: 'D', beneficiaries: ['B', 'C', 'D'] }
+  { amount: 1200, payer: "A", beneficiaries: ["A", "B"] },
+  { amount: 1200, payer: "B", beneficiaries: ["A", "B", "C", "D"] },
+  { amount: 1200, payer: "C", beneficiaries: ["A", "B", "C", "D"] },
+  { amount: 1200, payer: "D", beneficiaries: ["B", "C", "D"] },
 ];
 
 const repayments = solve(payments);
@@ -201,20 +199,20 @@ const repayments = solve(payments);
 
 ```typescript
 // これらはエラーになる
-solve([{ amount: -100, payer: 'A', beneficiaries: ['B'] }]);  // 負の金額
-solve([{ amount: 100, payer: '', beneficiaries: ['B'] }]);    // 空の payer
-solve([{ amount: 100, payer: 'A', beneficiaries: [''] }]);    // 空の beneficiary
-solve([{ amount: 100, payer: 'A', beneficiaries: ['B', 'B'] }]); // 重複する beneficiary
+solve([{ amount: -100, payer: "A", beneficiaries: ["B"] }]); // 負の金額
+solve([{ amount: 100, payer: "", beneficiaries: ["B"] }]); // 空の payer
+solve([{ amount: 100, payer: "A", beneficiaries: [""] }]); // 空の beneficiary
+solve([{ amount: 100, payer: "A", beneficiaries: ["B", "B"] }]); // 重複する beneficiary
 ```
 
 **エラーメッセージ形式:**
 
-| エラー種別               | メッセージ                                        |
-| ------------------------ | ------------------------------------------------- |
-| 負の金額                 | `Invalid amount: -100 (must be non-negative)`     |
-| 空の payer               | `Invalid payer: empty string`                     |
-| 空の beneficiary         | `Invalid beneficiary: empty string`               |
-| 重複する beneficiary     | `Duplicate beneficiary: 'B'`                      |
+| エラー種別           | メッセージ                                    |
+| -------------------- | --------------------------------------------- |
+| 負の金額             | `Invalid amount: -100 (must be non-negative)` |
+| 空の payer           | `Invalid payer: empty string`                 |
+| 空の beneficiary     | `Invalid beneficiary: empty string`           |
+| 重複する beneficiary | `Duplicate beneficiary: 'B'`                  |
 
 ## モジュール構成
 
@@ -235,8 +233,8 @@ warikan/
 
 ```typescript
 // src/index.ts
-export type { Money, PersonId, Payment, Repayment } from './types';
-export { solve } from './solve';
+export type { Money, PersonId, Payment, Repayment } from "./types";
+export { solve } from "./solve";
 ```
 
 ## テストケースの移植方針
@@ -245,25 +243,25 @@ Rust 版のテストケースを Vitest の `test.each` を使って移植する
 
 ```typescript
 // tests/solve.test.ts
-import { describe, test, expect } from 'vitest';
-import { solve, Payment, Repayment } from '../src';
+import { describe, test, expect } from "vitest";
+import { solve, Payment, Repayment } from "../src";
 
-describe('solve', () => {
+describe("solve", () => {
   test.each([
     // ケース1: シンプルな支払い
     {
-      name: 'simple payment',
-      payments: [{ amount: 100, payer: 'A', beneficiaries: ['B'] }],
-      expected: [{ amount: 100, from: 'B', to: 'A' }]
+      name: "simple payment",
+      payments: [{ amount: 100, payer: "A", beneficiaries: ["B"] }],
+      expected: [{ amount: 100, from: "B", to: "A" }],
     },
     // ケース2: 自分自身も受益者に含む場合
     {
-      name: 'payer is also beneficiary',
-      payments: [{ amount: 100, payer: 'A', beneficiaries: ['A', 'B'] }],
-      expected: [{ amount: 50, from: 'B', to: 'A' }]
+      name: "payer is also beneficiary",
+      payments: [{ amount: 100, payer: "A", beneficiaries: ["A", "B"] }],
+      expected: [{ amount: 50, from: "B", to: "A" }],
     },
     // ... 他のケース
-  ])('$name', ({ payments, expected }) => {
+  ])("$name", ({ payments, expected }) => {
     expect(solve(payments)).toEqual(expected);
   });
 });
@@ -297,10 +295,14 @@ describe('solve', () => {
 
   ```typescript
   [
-    { amount: 8000, payer: 'A', beneficiaries: ['A','B','C','D','E','F','G','H'] },
-    { amount: 4000, payer: 'B', beneficiaries: ['A','B','C','D'] },
-    { amount: 2000, payer: 'C', beneficiaries: ['E','F'] }
-  ]
+    {
+      amount: 8000,
+      payer: "A",
+      beneficiaries: ["A", "B", "C", "D", "E", "F", "G", "H"],
+    },
+    { amount: 4000, payer: "B", beneficiaries: ["A", "B", "C", "D"] },
+    { amount: 2000, payer: "C", beneficiaries: ["E", "F"] },
+  ];
   ```
 
 - 残高計算: A=+6000, B=+2000, C=0, D=-2000, E=-2000, F=-2000, G=-1000, H=-1000
@@ -309,12 +311,12 @@ describe('solve', () => {
 
   ```typescript
   [
-    { amount: 2000, from: 'D', to: 'A' },
-    { amount: 2000, from: 'E', to: 'A' },
-    { amount: 2000, from: 'F', to: 'A' },
-    { amount: 1000, from: 'G', to: 'B' },
-    { amount: 1000, from: 'H', to: 'B' }
-  ]
+    { amount: 2000, from: "D", to: "A" },
+    { amount: 2000, from: "E", to: "A" },
+    { amount: 2000, from: "F", to: "A" },
+    { amount: 1000, from: "G", to: "B" },
+    { amount: 1000, from: "H", to: "B" },
+  ];
   ```
 
 #### 6. 9人グループ、多数の支払い
@@ -366,12 +368,12 @@ describe('solve', () => {
 
 ```typescript
 // vitest.config.ts
-import { defineConfig } from 'vitest/config';
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
     globals: true,
-    include: ['tests/**/*.test.ts'],
+    include: ["tests/**/*.test.ts"],
   },
 });
 ```
