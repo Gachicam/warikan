@@ -104,6 +104,40 @@ describe("solve", () => {
         { amount: 100, from: "D", to: "B" },
       ],
     },
+    // 11. 端数処理（100円を3人で割る → 33, 33, 34）
+    {
+      name: "remainder goes to last beneficiary",
+      payments: [{ amount: 100, payer: "A", beneficiaries: ["B", "C", "D"] }],
+      expected: [
+        { amount: 33, from: "B", to: "A" },
+        { amount: 33, from: "C", to: "A" },
+        { amount: 34, from: "D", to: "A" },
+      ],
+    },
+    // 12. 端数処理（payer も含む場合: 100円を4人で割る → 25, 25, 25, 25）
+    {
+      name: "remainder with payer included",
+      payments: [
+        { amount: 100, payer: "A", beneficiaries: ["A", "B", "C", "D"] },
+      ],
+      expected: [
+        { amount: 25, from: "B", to: "A" },
+        { amount: 25, from: "C", to: "A" },
+        { amount: 25, from: "D", to: "A" },
+      ],
+    },
+    // 13. 端数処理（101円を4人で割る → 25, 25, 25, 26）
+    {
+      name: "remainder 101 yen among 4 people",
+      payments: [
+        { amount: 101, payer: "A", beneficiaries: ["A", "B", "C", "D"] },
+      ],
+      expected: [
+        { amount: 25, from: "B", to: "A" },
+        { amount: 25, from: "C", to: "A" },
+        { amount: 26, from: "D", to: "A" },
+      ],
+    },
   ])("$name", ({ payments, expected }) => {
     expect(solve(payments)).toEqual(expected);
   });
